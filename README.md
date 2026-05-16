@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI Helpdesk Chat System
 
 A full-stack AI-powered helpdesk chat application built using FastAPI, JavaScript, SQLite, and automation-driven conversational workflows.
@@ -184,3 +185,6 @@ in your browser.
 # Author
 
 Nasratullah Mirzai
+=======
+# ai-helpdesk-chat-system
+>>>>>>> 44186905cf6b9bb1f1e83142e42304333e0b913e
