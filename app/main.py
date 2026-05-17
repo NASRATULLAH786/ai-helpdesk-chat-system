@@ -1,14 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from datetime import datetime
 
 from app.database import SessionLocal, ChatHistory
 
-app = FastAPI(
-    title="AI Helpdesk Chat System",
-    description="AI-powered customer support automation and workflow management platform."
-)
+
+app = FastAPI(title="AI Helpdesk Chat System")
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,57 +22,21 @@ class ChatRequest(BaseModel):
 
 @app.get("/")
 def home():
-    return {
-        "message": "AI Helpdesk Chat System Running",
-        "status": "active",
-        "timestamp": datetime.utcnow()
-    }
+    return {"message": "AI Helpdesk Chat System Running"}
 
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-
     user_message = request.message.lower()
 
-    category = "general"
-    priority = "normal"
-
     if "refund" in user_message:
-        category = "billing"
-        reply = (
-            "Your refund request has been submitted successfully. "
-            "Refunds are typically processed within 3-5 business days."
-        )
-
+        reply = "Refunds are processed within 3-5 business days."
     elif "password" in user_message:
-        category = "authentication"
-        reply = (
-            "Please use the password reset option available on the login page. "
-            "A reset link will be sent to your registered email address."
-        )
-
+        reply = "Use the password reset link on the login page."
     elif "urgent" in user_message:
-        category = "escalation"
-        priority = "high"
-
-        reply = (
-            "Your request has been marked as urgent and escalated "
-            "to the support team for immediate review."
-        )
-
-    elif "payment" in user_message:
-        category = "payment"
-
-        reply = (
-            "We detected a payment-related issue. "
-            "Please verify your payment details or contact billing support."
-        )
-
+        reply = "Your issue has been marked as urgent and escalated."
     else:
-        reply = (
-            "Thank you for contacting AI Support. "
-            "Our support workflow system has received your request."
-        )
+        reply = "Our support team will assist you shortly."
 
     db = SessionLocal()
 
@@ -90,16 +51,12 @@ def chat(request: ChatRequest):
 
     return {
         "user_message": request.message,
-        "reply": reply,
-        "category": category,
-        "priority": priority,
-        "status": "processed"
+        "reply": reply
     }
 
 
 @app.get("/history")
 def get_history():
-
     db = SessionLocal()
     chats = db.query(ChatHistory).all()
 
@@ -113,7 +70,4 @@ def get_history():
 
     db.close()
 
-    return {
-        "total_conversations": len(results),
-        "history": results
-    }
+    return results
