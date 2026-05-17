@@ -1,190 +1,71 @@
-<<<<<<< HEAD
 # AI Helpdesk Chat System
 
-A full-stack AI-powered helpdesk chat application built using FastAPI, JavaScript, SQLite, and automation-driven conversational workflows.
+---
 
-The system allows users to:
-- send support messages
-- receive automated AI-style responses
-- store chat history in SQLite
-- reload previous conversations
-- simulate intelligent customer support workflows
+## Architecture
+
+(Add architecture diagram here)
+
+Example Workflow:
+
+User → Frontend Chat UI → Backend API → AI Model → Database → Ticket Workflow Engine → Response System
 
 ---
 
-# Screenshots
+## API Integrations
 
-## Chat Interface
-
-![Chat UI](screenshots/chat-ui.png)
-
-## API Documentation
-
-![Swagger API](screenshots/swagger-api.png)
+- OpenAI API
+- Internal support APIs
+- Webhook integrations
+- Database connections
 
 ---
 
-# Features
+## Technical Challenges
 
-## AI Helpdesk Workflow
-Supports automated responses for:
-- password reset issues
-- refund requests
-- urgent support escalation
-- general customer support
-
-## Backend API
-Built using FastAPI REST endpoints.
-
-## SQLite Chat History
-Stores:
-- user messages
-- AI replies
-- persistent conversation history
-
-## Frontend Chat Interface
-Interactive web-based support chat dashboard.
-
-## Automation Logic
-Demonstrates:
-- workflow automation
-- conversational processing
-- support ticket simulation
+- Managing conversation context
+- Optimizing AI response quality
+- Handling API failures gracefully
+- Maintaining scalable workflow architecture
+- Error handling and validation
 
 ---
 
-# Tech Stack
+## Future Improvements
 
-- Python
-- FastAPI
-- SQLite
-- SQLAlchemy
-- JavaScript
-- HTML/CSS
-- REST APIs
+- Multi-agent workflow system
+- Voice-based support integration
+- Vector database integration
+- Sentiment analysis
+- Admin analytics dashboard
+- Role-based access control
 
 ---
 
-# Project Structure
+## Screenshots
+
+(Add screenshots folder and images)
+
+Recommended Screenshots:
+
+- Chat interface
+- Ticket dashboard
+- Workflow execution
+- API response logs
+- Database records
+
+---
+
+## Demo Video
+
+(Add Loom or YouTube demo link)
+
+---
+
+## Installation
 
 ```bash
-ai-helpdesk-chat-system/
-│
-├── app/
-│   ├── main.py
-│   └── database.py
-│
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-│
-├── screenshots/
-│   ├── chat-ui.png
-│   └── swagger-api.png
-│
-├── requirements.txt
-└── README.md
-```
-
----
-
-# API Endpoints
-
-## Send Chat Message
-
-```http
-POST /chat
-```
-
-### Example Request
-
-```json
-{
-  "message": "I forgot my password"
-}
-```
-
----
-
-## Load Chat History
-
-```http
-GET /history
-```
-
-Returns saved conversations from SQLite database.
-
----
-
-# Setup Instructions
-
-## Clone Repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/ai-helpdesk-chat-system.git
-```
-
-## Create Virtual Environment
-
-```bash
-python -m venv venv
-```
-
-## Activate Virtual Environment
-
-### Windows
-
-```bash
-venv\Scripts\activate
-```
-
-### Linux / Mac
-
-```bash
-source venv/bin/activate
-```
-
-## Install Dependencies
-
-```bash
+git clone <repo-url>
+cd ai-helpdesk-chat-system
 pip install -r requirements.txt
-```
-
-## Run Backend
-
-```bash
-uvicorn app.main:app --reload --port 8081
-```
-
-## Open Frontend
-
-Open:
-
-```text
-frontend/index.html
-```
-
-in your browser.
-
----
-
-# Future Improvements
-
-- Real LLM integration
-- Authentication system
-- Multi-user chat
-- Ticket management
-- Admin dashboard
-- Cloud deployment
-- Docker support
-- Email notifications
-
----
-
-# Author
-
-Nasratullah Mirzai
-=======
-# ai-helpdesk-chat-system
->>>>>>> 44186905cf6b9bb1f1e83142e42304333e0b913e
+python app.py
