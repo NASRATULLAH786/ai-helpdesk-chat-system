@@ -1,35 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Helpdesk Chat System</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Helpdesk Chat System</title>
 
-    <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2563eb, #0f172a);
+      color: white;
+      padding: 35px;
+      border-radius: 18px;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+    }
+
+    .header p {
+      margin: 0;
+      color: #dbeafe;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e7eb;
+    }
+
+    .chat-box {
+      height: 420px;
+      overflow-y: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 16px;
+      background: #f9fafb;
+      margin-bottom: 16px;
+    }
+
+    .message {
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      max-width: 85%;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .user {
+      background: #dbeafe;
+      margin-left: auto;
+      border: 1px solid #bfdbfe;
+    }
+
+    .bot {
+      background: #dcfce7;
+      margin-right: auto;
+      border: 1px solid #bbf7d0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 13px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .secondary-btn {
+      background: #0f172a;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .secondary-btn:hover {
+      background: #111827;
+    }
+
+    .info-box {
+      background: #f9fafb;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #e5e7eb;
+      font-size: 14px;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      font-size: 14px;
+    }
+
+    .success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .loading {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .history-item {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .history-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 850px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 26px;
+      }
+
+      .input-row {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-    <div class="chat-container">
-
-        <h1>AI Helpdesk Chat</h1>
-
-        <div id="chatBox" class="chat-box"></div>
-
-        <div class="input-area">
-            <input
-                type="text"
-                id="messageInput"
-                placeholder="Type your message..."
-            >
-
-            <button onclick="sendMessage()">
-                Send
-            </button>
-        </div>
-
+  <div class="container">
+    <div class="header">
+      <h1>AI Helpdesk Chat System</h1>
+      <p>Automated customer support chat with workflow-based responses, ticket categories, priority detection, and chat history tracking.</p>
     </div>
 
-    <script src="script.js"></script>
+    <div class="grid">
+      <div class="card">
+        <h2>Support Chat</h2>
 
+        <div id="chatBox" class="chat-box">
+          <div class="message bot">
+            <strong>AI Support:</strong> Hello! How can I help you today?
+          </div>
+        </div>
+
+        <div class="input-row">
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Type your support message..."
+            onkeydown="handleEnter(event)"
+          />
+          <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <div id="statusBox" class="status">Ready to assist with customer support requests.</div>
+      </div>
+
+      <div class="card">
+        <h2>Workflow Actions</h2>
+
+        <div class="info-box">
+          <strong>Password Issue</strong>
+          <p>Try: I forgot my password</p>
+        </div>
+
+        <div class="info-box">
+          <strong>Refund Request</strong>
+          <p>Try: I need a refund</p>
+        </div>
+
+        <div class="info-box">
+          <strong>Urgent Support</strong>
+          <p>Try: This is urgent</p>
+        </div>
+
+        <div class="info-box">
+          <strong>Payment Issue</strong>
+          <p>Try: I have a payment problem</p>
+        </div>
+
+        <button class="secondary-btn" onclick="loadHistory()">Load Chat History</button>
+
+        <div id="historyBox" class="status">Chat history will appear here.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://127.0.0.1:8081";
+
+    function handleEnter(event) {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    }
+
+    function addMessage(sender, text, type) {
+      const chatBox = document.getElementById("chatBox");
+
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `message ${type}`;
+      messageDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const statusBox = document.getElementById("statusBox");
+      const message = input.value.trim();
+
+      if (!message) {
+        statusBox.className = "status error";
+        statusBox.innerText = "Please type a message before sending.";
+        return;
+      }
+
+      addMessage("You", message, "user");
+      input.value = "";
+
+      statusBox.className = "status loading";
+      statusBox.innerText = "AI support is processing your request...";
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/chat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: message,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "Failed to get AI support response.");
+        }
+
+        addMessage(
+          "AI Support",
+          `${data.reply}<br><br><strong>Category:</strong> ${data.category}<br><strong>Priority:</strong> ${data.priority}<br><strong>Status:</strong> ${data.status}`,
+          "bot"
+        );
+
+        statusBox.className = "status success";
+        statusBox.innerText = "Response generated, categorized, prioritized, and saved successfully.";
+
+      } catch (error) {
+        addMessage("System", "Unable to connect to backend server.", "bot");
+
+        statusBox.className = "status error";
+        statusBox.innerText = error.message;
+      }
+    }
+
+    async function loadHistory() {
+      const historyBox = document.getElementById("historyBox");
+
+      historyBox.className = "status loading";
+      historyBox.innerText = "Loading chat history...";
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/history`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error("Failed to load chat history.");
+        }
+
+        const historyItems = data.history || [];
+
+        if (!historyItems.length) {
+          historyBox.className = "status";
+          historyBox.innerText = "No chat history found.";
+          return;
+        }
+
+        historyBox.className = "status";
+        historyBox.innerHTML = `
+          <strong>Total Conversations:</strong> ${data.total_conversations}
+          <br><br>
+          ${historyItems.map(item => `
+            <div class="history-item">
+              <strong>User:</strong>
+              ${item.user_message}
+              <br><br>
+              <strong>AI Support:</strong>
+              ${item.bot_reply}
+            </div>
+          `).join("")}
+        `;
+
+      } catch (error) {
+        historyBox.className = "status error";
+        historyBox.innerText = error.message;
+      }
+    }
+  </script>
 </body>
 </html>
